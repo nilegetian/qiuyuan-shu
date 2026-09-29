@@ -339,6 +339,12 @@ img{max-width:100%;display:block;}
 .sort-tabs{display:flex;background:rgba(255,255,255,.05);border-radius:999px;padding:3px;}
 .sort-tabs button{padding:7px 18px;border-radius:999px;font-size:13px;color:var(--paper-dim);letter-spacing:.1em;transition:.2s;}
 .sort-tabs button.on{background:var(--gold);color:#2B1A08;font-weight:600;}
+.mywish-btn{margin-left:10px;padding:8px 18px;border-radius:999px;font-size:13px;color:var(--gold);background:rgba(233,200,128,.12);border:1px solid rgba(233,200,128,.4);letter-spacing:.1em;transition:.2s;cursor:pointer;white-space:nowrap;}
+.mywish-btn:hover{background:rgba(233,200,128,.25);}
+.personal-banner{max-width:1120px;margin:14px auto 0;padding:14px 24px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;border-radius:var(--radius);background:linear-gradient(120deg,rgba(233,200,128,.18),rgba(217,122,140,.10));border:1px solid rgba(233,200,128,.35);}
+.personal-banner .pb-t{font-family:var(--serif);font-size:15px;color:var(--gold-soft);}
+.personal-banner .pb-s{font-size:12px;color:var(--paper-dim);margin-top:4px;}
+.personal-banner .pb-btn{padding:8px 22px;border-radius:999px;font-size:13px;font-weight:600;background:var(--gold);color:#2B1A08;letter-spacing:.1em;cursor:pointer;}
 .wall-note{max-width:1120px;margin:16px auto 0;padding:0 24px;font-size:12px;color:rgba(245,235,221,.4);letter-spacing:.08em;}
 .wish-cta{
   max-width:1120px;margin:22px auto 0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
@@ -759,9 +765,9 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
       <h1>祈愿<span class="dian">树</span></h1>
       <p class="sub">把心里的话，交给一盏灯。这里收留每一个真诚的愿望。</p>
       <div class="stats">
-        <div><div class="num" id="statToday">2,314</div><div class="lbl">今日已点亮</div></div>
-        <div><div class="num" id="statTotal">128,647</div><div class="lbl">累计心愿</div></div>
-        <div><div class="num" id="statCity">312</div><div class="lbl">覆盖城市</div></div>
+        <div><div class="num" id="statToday">0</div><div class="lbl">今日已点亮</div></div>
+        <div><div class="num" id="statTotal">0</div><div class="lbl">累计心愿</div></div>
+        <div><div class="num" id="statCity">0</div><div class="lbl">覆盖城市</div></div>
       </div>
       <div class="cta-row">
         <button class="btn-primary" onclick="openWishModal()">写下心愿</button>
@@ -789,9 +795,11 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
         <button data-sort="new" class="on">最新</button>
         <button data-sort="hot">最热</button>
       </div>
+      <button class="mywish-btn" onclick="goMyTree()">我的祈愿</button>
     </div>
   </div>
-  <p class="wall-note">含演示祝愿 · 你发布的心愿也会出现在这里，点击烛火可点亮</p>
+  <p class="wall-note" id="wallNote">含演示祝愿 · 你发布的心愿也会出现在这里，点击烛火可点亮</p>
+  <div class="personal-banner" id="personalBanner" style="display:none"></div>
   <div class="wish-cta" onclick="openWishModal()" role="button" tabindex="0">
     <div>
       <div class="wc-top">
@@ -849,19 +857,19 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
   <div class="kpi-row">
     <div class="kpi">
       <div class="k-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E9C880" stroke-width="1.4"><path d="M12 3v18M3 12h18"/><circle cx="12" cy="12" r="9"/></svg></div>
-      <div class="k-num" data-count="128647">0</div><div class="k-lbl">累计心愿</div><div class="k-sub">自上线以来</div>
+      <div class="k-num" data-key="total">0</div><div class="k-lbl">累计心愿</div><div class="k-sub">自上线以来</div>
     </div>
     <div class="kpi">
       <div class="k-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E9C880" stroke-width="1.4"><path d="M12 21s-7-4.5-9.5-9A5.4 5.4 0 0 1 12 6.6 5.4 5.4 0 0 1 21.5 12C19 16.5 12 21 12 21z"/></svg></div>
-      <div class="k-num" data-count="2314">0</div><div class="k-lbl">今日点亮</div><div class="k-sub">峰值 21 时</div>
+      <div class="k-num" data-key="today">0</div><div class="k-lbl">今日点亮</div><div class="k-sub">峰值 21 时</div>
     </div>
     <div class="kpi">
       <div class="k-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E9C880" stroke-width="1.4"><path d="M4 19V9l8-5 8 5v10M9 19v-6h6v6M3 19h18"/></svg></div>
-      <div class="k-num" data-count="312">0</div><div class="k-lbl">覆盖城市</div><div class="k-sub">全球华语地区</div>
+      <div class="k-num" data-key="city">0</div><div class="k-lbl">覆盖城市</div><div class="k-sub">全球华语地区</div>
     </div>
     <div class="kpi">
       <div class="k-ico"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="#E9C880" stroke-width="1.4"><path d="M12 2l2.4 6.2L21 9l-5 4 1.6 6.6L12 16l-5.6 3.6L8 13 3 9l6.6-.8z"/></svg></div>
-      <div class="k-num" data-count="41208">0</div><div class="k-lbl">本月亮点</div><div class="k-sub">环比 +18%</div>
+      <div class="k-num" data-key="monthHot">0</div><div class="k-lbl">本月亮点</div><div class="k-sub">环比 +18%</div>
     </div>
   </div>
   <div class="chart-grid">
@@ -966,6 +974,14 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
     <h3>祈愿树 · 管理后台</h3>
     <p class="a-sub" id="adminSub">正在加载云端数据…</p>
     <div class="a-stat" id="adminStat"></div>
+    <div style="margin:10px 0;padding:12px;border-radius:12px;background:rgba(233,200,128,.08);border:1px solid rgba(233,200,128,.25)">
+      <div style="font-size:13px;color:#E9C880;margin-bottom:6px">数据管理</div>
+      <div id="adminDataRow" style="font-size:12px;color:rgba(245,235,221,.8);line-height:1.7"></div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px;align-items:center">
+        <button class="btn-admin" id="adminDemoBtn" onclick="toggleDemoData()">清除演示数据</button>
+        <span id="adminDemoTip" style="font-size:11px;color:rgba(245,235,221,.55)"></span>
+      </div>
+    </div>
     <div class="a-list" id="adminList"></div>
     <div class="a-empty" id="adminEmpty" style="display:none">云端暂无心愿。发布第一条心愿后，会出现在这里。</div>
     <div class="a-foot">
@@ -1030,6 +1046,7 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
       <button class="share-btn primary" onclick="downloadCard()">保存图片</button>
       <button class="share-btn" id="shareNativeBtn" onclick="doShare()" hidden>系统分享</button>
       <button class="share-btn full" onclick="doCopy()">复制祝福文案</button>
+      <button class="share-btn full" onclick="shareMyTree()">分享我的祈愿树</button>
     </div>
     <div class="share-tip" id="shareTip"></div>
   </div>
@@ -1110,6 +1127,68 @@ var userWishes=loadUser(), likes=loadLikes();
    留空则用本地存储（单机演示模式），两种模式页面功能一致。 */
 var CONFIG={ SUPA_URL:'https://jkgicgkozekccqaxtpnc.supabase.co', SUPA_KEY:'sb_publishable_4xSWYGF8H2N3TPvPjF2MGg_eyFbAsiz' };
 var CLOUD=!!(CONFIG.SUPA_URL&&CONFIG.SUPA_KEY);
+
+/* ===== 演示数据（冷启动撑场）=====
+   首次上线时用一组自洽的演示数字撑起首页与数据页氛围；
+   后台「数据管理」可一键清除，切换为真实云端统计，各板块自动保持一致。 */
+var DEMO_STATS={ today:2314, total:128647, city:312, wallToday:2314, monthHot:41208,
+  cat:[31240,28904,24586,20672,12304,10941], week:[2861,3057,2934,3412,3906,4215,3867],
+  hour:[320,210,160,130,140,260,520,640,610,540,470,420,430,480,520,560,600,720,980,1240,1380,1290,860,520] };
+var DEMO_KEY='wishTree_demoCleared';
+function demoCleared(){ try{return localStorage.getItem(DEMO_KEY)==='1';}catch(e){return false;} }
+function setDemoCleared(v){ try{localStorage.setItem(DEMO_KEY,v?'1':'0');}catch(e){} }
+function demoStat(){ return demoCleared()?{today:0,total:0,city:0,wallToday:0,monthHot:0,cat:null,week:null,hour:null}:DEMO_STATS; }
+
+/* ===== 个人祈愿（每人一盏自己的树）=====
+   首次访问生成设备 uid；发布心愿带 uid；分享链接带 ?u=<uid>，
+   朋友打开即进入「ta 的祈愿树」独立页面，可看到并点亮 ta 挂的灯。 */
+var UID_KEY='wishTree_uid';
+function myUid(){
+  var u=''; try{u=localStorage.getItem(UID_KEY)||'';}catch(e){}
+  if(!u){ u='u_'+Date.now().toString(36)+Math.random().toString(36).slice(2,8); try{localStorage.setItem(UID_KEY,u);}catch(e){} }
+  return u;
+}
+function getParam(name){
+  try{ var m=location.search.match(new RegExp('[?&]'+name+'=([^&]+)')); return m?decodeURIComponent(m[1]):''; }catch(e){ return ''; }
+}
+var personalUid=getParam('u');
+var personalWishes=[];
+function loadPersonal(){
+  if(!personalUid||!CLOUD) return;
+  supa('/rest/v1/wishes?select=*&uid=eq.'+encodeURIComponent(personalUid)+'&order=created_at.desc&limit=60').then(function(rows){
+    if(!Array.isArray(rows)) return;
+    personalWishes=rows.map(function(r){return{id:'c'+r.id,no:r.no,cat:r.cat,name:r.name||'匿名的一盏灯',time:cloudTime(r.created_at),likes:r.likes||0,text:r.text,_sid:r.id,uid:r.uid};});
+    try{renderTree(false);renderWall();renderPersonalBanner();}catch(e){}
+  });
+}
+function renderPersonalBanner(){
+  var b=$('#personalBanner'); if(!b) return;
+  if(!personalUid){ b.style.display='none'; return; }
+  b.style.display='flex';
+  var n=personalWishes.length;
+  var owner=personalWishes.length? personalWishes[0].name : '这位朋友';
+  b.innerHTML='<div><div class="pb-t">'+esc(owner)+' 的祈愿树</div>'
+    +'<div class="pb-s">'+(n>0?('ta 在这里挂起了 '+n+' 盏灯 · 每一盏都值得被看见'):('ta 的心愿灯还没挂上来'))+'</div></div>'
+    +'<button class="pb-btn" onclick="openWishModal()">我也祈福</button>';
+}
+function goMyTree(){
+  var base=location.origin+location.pathname;
+  if(base.indexOf('file:')===0){ toast('请用线上链接打开后，再查看我的祈愿树'); return; }
+  location.href=base+'?u='+myUid();
+}
+function shareMyTree(){
+  var base=location.origin+location.pathname;
+  if(base.indexOf('file:')===0){ shareTip('本地预览没有可分享的链接，发布上线后可分享你的祈愿树'); return; }
+  var link=base+'?u='+myUid();
+  var txt='我在祈愿树挂了一盏灯，来为我的心愿添一份光：'+link;
+  if(navigator.share){
+    navigator.share({title:'我的祈愿树',text:txt,url:link}).catch(function(){});
+  }else{
+    var done=function(){shareTip('祈愿树链接已复制，发给在意的人吧');};
+    if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done).catch(function(){fallbackCopy(txt);done();}); }
+    else{ fallbackCopy(txt); done(); }
+  }
+}
 function supa(path,opt){
   var o=opt||{};
   var h={apikey:CONFIG.SUPA_KEY,'Authorization':'Bearer '+CONFIG.SUPA_KEY,'Content-Type':'application/json'};
@@ -1121,7 +1200,7 @@ function cloudTime(iso){
   if(s<1)return'刚刚'; if(s<60)return Math.floor(s)+' 分钟前';
   if(s<1440)return Math.floor(s/60)+' 小时前'; return Math.floor(s/1440)+' 天前';
 }
-var cloudToday=0, hiddenIds=null;
+var cloudToday=0, cloudTotal=0, hiddenIds=null;
 function syncCloud(){
   if(!CLOUD)return;
   supa('/rest/v1/hidden_wishes?select=wish_id&limit=1000').then(function(hs){
@@ -1132,14 +1211,16 @@ function syncCloud(){
     return supa('/rest/v1/wishes?select=*&order=created_at.desc&limit=80');
   }).then(function(rows){
     if(!Array.isArray(rows))return;
-    if(rows.length===0)return;
     if(hiddenIds){
       rows=rows.filter(function(r){return !hiddenIds[r.id];});
     }
-    var mine=rows.map(function(r){return{id:'c'+r.id,no:r.no,cat:r.cat,name:r.name||'匿名的一盏灯',time:cloudTime(r.created_at),likes:r.likes||0,text:r.text};});
+    var mine=rows.map(function(r){return{id:'c'+r.id,no:r.no,cat:r.cat,name:r.name||'匿名的一盏灯',time:cloudTime(r.created_at),likes:r.likes||0,text:r.text,_sid:r.id,uid:r.uid||''};});
     var localNew=userWishes.filter(function(w){return w.id&&w.id.indexOf('u')===0;});
     userWishes=mine.concat(localNew);
-    try{renderTree(false);renderWall();updateStats();}catch(e){}
+    try{renderTree(false);renderWall();updateStats();refreshDataKpi();}catch(e){}
+  });
+  supa('/rest/v1/wishes?select=id').then(function(all){
+    if(Array.isArray(all)){cloudTotal=all.length;try{updateStats();refreshDataKpi();}catch(e){}}
   });
   supa('/rest/v1/wishes?select=id&created_at=gte.'+encodeURIComponent(nowStr()+'T00:00:00+08:00')).then(function(rows){
     if(Array.isArray(rows)&&rows.length){cloudToday=rows.length; try{renderTodayFocus();}catch(e){}}
@@ -1147,9 +1228,19 @@ function syncCloud(){
 }
 function cloudPush(w){
   if(!CLOUD)return;
-  supa('/rest/v1/wishes',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({no:w.no,cat:w.cat,name:w.name,text:w.text,likes:w.likes||0})}).then(function(r){
-    var row=(r&&r.id)?r:((r&&r[0]&&r[0].id)?r[0]:null);
-    if(row){w._sid=row.id;}
+  var body={no:w.no,cat:w.cat,name:w.name,text:w.text,likes:w.likes||0,uid:w.uid||myUid()};
+  var parseRow=function(r){return (r&&r.id)?r:((r&&r[0]&&r[0].id)?r[0]:null);};
+  supa('/rest/v1/wishes',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(body)}).then(function(r){
+    var row=parseRow(r);
+    if(row){w._sid=row.id;return;}
+    /* uid 列未生效时（云端还没加列），回退为不带 uid 发布，保证心愿不丢 */
+    if(r&&r._error){
+      var b2={no:w.no,cat:w.cat,name:w.name,text:w.text,likes:w.likes||0};
+      supa('/rest/v1/wishes',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify(b2)}).then(function(r2){
+        var row2=parseRow(r2);
+        if(row2){w._sid=row2.id;}
+      });
+    }
   });
 }
 function cloudLike(w){
@@ -1258,14 +1349,16 @@ function renderTree(animateNew){
   var canopy=$('#treeCanopy'); canopy.innerHTML='';
   used=new Array(POINTS.length).fill(false);
   var idx=0;
-  userWishes.slice().reverse().forEach(function(w){
+  var list=personalUid? personalWishes : userWishes.slice().reverse();
+  list.forEach(function(w){
     if(idx>=POINTS.length) idx=0;
     while(used[idx]) idx=(idx+1)%POINTS.length;
     used[idx]=true;
     canopy.appendChild(makeLantern(w,POINTS[idx],false));
     idx=(idx+1)%POINTS.length;
   });
-  SEED.forEach(function(w){
+  if(!personalUid) SEED.forEach(function(w){
+    if(demoCleared()) return;
     if(idx>=POINTS.length) idx=0;
     while(used[idx]) idx=(idx+1)%POINTS.length;
     used[idx]=true;
@@ -1699,7 +1792,7 @@ function publishWish(){
   var mm=String(d.getMonth()+1).padStart(2,'0'), dd=String(d.getDate()).padStart(2,'0');
   var total=SEED.length+userWishes.length+1;
   var name=$('#wishAnon').checked? '匿名的一盏灯' : ($('#wishName').value.trim()||'匿名的一盏灯');
-  var wish={no:'祈·'+mm+dd+'·'+String(total).padStart(4,'0'),cat:chosenCat,name:name,time:'刚刚',likes:0,text:text,id:'u'+Date.now()};
+  var wish={no:'祈·'+mm+dd+'·'+String(total).padStart(4,'0'),cat:chosenCat,name:name,time:'刚刚',likes:0,text:text,id:'u'+Date.now(),uid:myUid()};
   userWishes.unshift(wish); saveUser(userWishes);
   cloudPush(wish); /* 云端同步（正式版） */
   closeWishModal();
@@ -1736,11 +1829,11 @@ function renderChips(){
   });
 }
 function allWishes(){
-  return userWishes.concat(SEED);
+  return userWishes.concat(demoCleared()?[]:SEED);
 }
 function renderWall(){
   var grid=$('#wallGrid'); if(!grid) return;
-  var list=allWishes();
+  var list=personalUid? personalWishes.slice() : allWishes();
   if(wallCat!=='all') list=list.filter(function(w){return w.cat===wallCat;});
   if(wallSort==='hot') list=list.slice().sort(function(a,b){return (b.likes||0)-(a.likes||0);});
   else list=list.slice().sort(function(a,b){return (b.id||('s'+b.no))<(a.id||('s'+a.no))?-1:1;});
@@ -1768,7 +1861,7 @@ function likeFromWall(btn,id){
   cloudLike(w);
   if(curDetail && (curDetail.id||curDetail.no)===id) showDetail(w,curDetail._el||null);
 }
-function findWish(id){return allWishes().find(function(w){return (w.id||w.no)===id;});}
+function findWish(id){return allWishes().concat(personalWishes).find(function(w){return (w.id||w.no)===id;});}
 function copyWish(btn,id){
   var w=findWish(id); if(!w) return;
   var txt='我把一盏灯挂在了祈愿树上：「'+w.text+'」 —— '+w.name+' · '+w.no+'（祈愿树）';
@@ -1799,11 +1892,29 @@ function animateNum(el){
   }
   requestAnimationFrame(step);
 }
+function refreshDataKpi(){
+  document.querySelectorAll('.kpi .k-num').forEach(function(el){
+    var ds=demoStat(); var k=el.getAttribute('data-key')||'total';
+    var v=(ds[k]!==undefined&&ds[k]!==null)?ds[k]:0;
+    if(demoCleared()&&CLOUD){
+      if(k==='total')v=cloudTotal; else if(k==='today')v=cloudToday; else if(k==='city')v=0;
+    }
+    el.dataset.count=String(v); animateNum(el);
+  });
+}
 function updateStats(){
-  var total=128647+userWishes.length;
-  var today=2314+userWishes.filter(function(w){return w.time==='刚刚';}).length;
+  var ds=demoStat();
+  var localNew=userWishes.filter(function(w){return w.time==='刚刚';}).length;
+  var total,today,city;
+  if(demoCleared()){
+    if(CLOUD){ total=cloudTotal; today=cloudToday+localNew; city=0; }
+    else{ total=userWishes.length; today=localNew; city=0; }
+  }else{
+    total=ds.total+userWishes.length; today=ds.today+localNew; city=ds.city;
+  }
   $('#statTotal').textContent=fmt(total);
   $('#statToday').textContent=fmt(today);
+  $('#statCity').textContent=fmt(city);
 }
 
 /* ============ 图表 ============ */
@@ -1993,7 +2104,7 @@ function renderTodayFocus(){
   if(!$('#tfFest')) return;
   var d=new Date(), f=todayFestival(d);
   var theme=DAILY_THEMES[dayOfYear(d)%DAILY_THEMES.length];
-  var n=CLOUD?cloudToday:(1287+(getDaily().n||0));
+  var n=demoCleared()? (CLOUD?cloudToday:0) : (DEMO_STATS.wallToday+(getDaily().n||0));
   $('#tfFest').textContent=f? (f.name+' · '+f.tag) : '日常 · 一盏灯';
   $('#tfTheme').innerHTML='今日话题 · <b>'+theme+'</b>';
   $('#tfCount').textContent='今日已点亮 '+n.toLocaleString()+' 盏 · 看见别人的心愿，也想为自己点一盏灯？';
@@ -2011,8 +2122,7 @@ var SCENES=[
 ];
 var curScene=null;
 function sceneWishes(cat){
-  return SEED.filter(function(w){return w.cat===cat;})
-    .concat(userWishes.filter(function(w){return w.cat===cat;}));
+  return (demoCleared()?userWishes:userWishes.concat(SEED)).filter(function(w){return w.cat===cat;});
 }
 function renderSceneList(){
   var g=$('#sceneList'); if(!g)return;
@@ -2079,13 +2189,16 @@ function sceneWish(){
 document.addEventListener('DOMContentLoaded',function(){
   renderCats(); renderTree(false); renderChips(); renderWall(); renderCal(); makeDust(); stepMark();
   renderTodayFocus();
-  document.querySelectorAll('.kpi .k-num').forEach(animateNum);
+  $('#wallNote').textContent=demoCleared()?'你发布的心愿会出现在这里，点击烛火可点亮':'含演示祝愿 · 你发布的心愿也会出现在这里，点击烛火可点亮';
+  renderPersonalBanner();
+  refreshDataKpi();
   updateStats();
   var h='tree';
   try{h=(location.hash||'#tree').replace('#','');}catch(e){}
   goView(VIEWS[h]?h:'tree');
   tryInitCharts();
   syncCloud(); /* 正式版：云端数据到达后自动刷新页面 */
+  loadPersonal(); /* 打开分享链接 ?u= 时加载对应祈愿树 */
 });
 
 /* ============ 管理后台 ============ */
@@ -2094,7 +2207,22 @@ function adminFetch(path,opt){
   var o=opt||{};
   var h={apikey:CONFIG.SUPA_KEY,'Authorization':'Bearer '+CONFIG.SUPA_KEY,'Content-Type':'application/json'};
   if(o.headers)Object.assign(h,o.headers);
-  return fetch(CONFIG.SUPA_URL+path,Object.assign({method:o.method||'GET',headers:h},o)).then(function(r){return r.json();}).catch(function(){return null;});
+  return fetch(CONFIG.SUPA_URL+path,Object.assign({method:o.method||'GET',headers:h},o))
+    .then(function(r){
+      if(!r.ok){ var e=new Error('HTTP '+r.status); e.status=r.status; throw e; }
+      return r.json();
+    })
+    .catch(function(e){
+      var msg=e&&e.status?('HTTP '+e.status):(e&&e.message?e.message:'网络错误');
+      return {_error:msg};
+    });
+}
+function adminDiagHtml(){
+  var o=location.origin, p=location.pathname;
+  var diag='当前页面：'+esc(location.href.slice(0,120))+'<br>页面来源：'+(o&&o.indexOf('file:')===0?'本地文件（file://）':'「'+esc(o)+'」');
+  diag+='<br>连接目标：'+esc(CONFIG.SUPA_URL||'（未配置）');
+  diag+='<br><br>排查建议：<br>① 请用线上链接打开后台：<b>https://nilegetian.github.io/qiuyuan-shu/</b>（本地 file 打开时部分浏览器会拦截跨域请求）；<br>② 若线上仍失败：检查 Supabase 控制台 → Integrations → Data API → Settings，确认 wishes / hidden_wishes 表已暴露；<br>③ 检查本机网络 / 防火墙是否放行 '+esc((CONFIG.SUPA_URL||'').replace('https://',''))+'；<br>④ 把本面板的提示文字发给我，我帮你继续排查。';
+  return diag;
 }
 function openAdminGate(){
   document.getElementById('adminGate').style.display='flex';
@@ -2116,6 +2244,32 @@ function adminLogin(){
   }
 }
 function catName(id){return catMap[id]?catMap[id].name:id;}
+function renderDataManage(){
+  var row=document.getElementById('adminDataRow');
+  var btn=document.getElementById('adminDemoBtn');
+  var tip=document.getElementById('adminDemoTip');
+  if(!row||!btn) return;
+  if(demoCleared()){
+    row.innerHTML='当前为 <b>真实数据模式</b>：首页 / 数据页 / 祝愿墙的数字均来自云端真实统计，已完全一致。演示心愿不再展示。';
+    btn.textContent='恢复演示数据';
+    tip.textContent='仅用于冷启动临时撑场，正式运营建议保持真实数据';
+  }else{
+    var ds=DEMO_STATS;
+    row.innerHTML='当前为 <b>演示模式</b>：今日 '+ds.today.toLocaleString()+' · 累计 '+ds.total.toLocaleString()+' · 城市 '+ds.city+' · 月亮点 '+ds.monthHot.toLocaleString()+'<br>首页 / 数据页 / 祝愿墙引用同一组数字，保持一致；后期有了真实祈愿数据，可在此一键清除。';
+    btn.textContent='清除演示数据';
+    tip.textContent='清除后各板块切换为云端真实统计，演示心愿不再展示';
+  }
+}
+function toggleDemoData(){
+  var willClear=!demoCleared();
+  if(willClear){
+    if(!confirm('确认清除演示数据？\n\n清除后首页、数据页、祝愿墙将全部切换为云端真实统计，演示心愿不再展示。\n（建议积累到真实祈愿数据后再清除）')) return;
+  }else{
+    if(!confirm('确认恢复演示数据？演示数字将重新展示（各板块一致）。')) return;
+  }
+  setDemoCleared(willClear);
+  try{location.reload();}catch(e){}
+}
 function loadAdminPanel(){
   var p=document.getElementById('adminPanel');
   if(!p)return;
@@ -2123,9 +2277,11 @@ function loadAdminPanel(){
   document.getElementById('adminSub').textContent='正在加载云端数据…';
   document.getElementById('adminList').innerHTML='';
   document.getElementById('adminEmpty').style.display='none';
+  renderDataManage();
   adminFetch('/rest/v1/wishes?select=*&order=created_at.desc&limit=60').then(function(rows){
     if(!Array.isArray(rows)){
-      document.getElementById('adminSub').textContent='云端连接失败，请检查网络后重试';
+      document.getElementById('adminSub').textContent='云端连接失败 · 已生成诊断信息（见下方「数据管理」区）';
+      document.getElementById('adminDataRow').innerHTML=adminDiagHtml();
       return;
     }
     adminFetch('/rest/v1/hidden_wishes?select=wish_id&limit=1000').then(function(hs){
