@@ -1996,7 +1996,8 @@ function renderCal(){
     {m:'11 月',d:'感恩季 · 考研冲刺',t:'考试季'},
     {m:'12 月',d:'考研上岸 · 跨年心愿书',t:'年度节点'}
   ];
-  var box=$('#calGrid'); box.innerHTML='';
+  var box=$('#calGrid'); if(!box) return; /* 运营日历区块已从正式版移除 */
+  box.innerHTML='';
   CAL.forEach(function(c){
     var d=document.createElement('div'); d.className='cal-card';
     d.innerHTML='<div class="cal-m">'+c.m+'</div><div class="cal-day">'+c.d+'</div><span class="cal-tag">'+c.t+'</span>';
@@ -2187,7 +2188,7 @@ function sceneWish(){
 
 /* ============ 初始化 ============ */
 document.addEventListener('DOMContentLoaded',function(){
-  renderCats(); renderTree(false); renderChips(); renderWall(); renderCal(); makeDust(); stepMark();
+  renderCats(); renderTree(false); renderChips(); renderWall(); makeDust(); stepMark();
   renderTodayFocus();
   $('#wallNote').textContent=demoCleared()?'你发布的心愿会出现在这里，点击烛火可点亮':'含演示祝愿 · 你发布的心愿也会出现在这里，点击烛火可点亮';
   renderPersonalBanner();
