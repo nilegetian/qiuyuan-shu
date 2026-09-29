@@ -554,6 +554,9 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
 .footer .f-links a:hover{color:var(--gold);}
 .footer .f-note{max-width:760px;margin:20px auto 0;font-size:12px;line-height:2;color:rgba(245,235,221,.38);}
 .footer .f-copy{margin-top:14px;font-size:12px;color:rgba(245,235,221,.3);}
+.footer .f-admin{margin-top:16px;font-size:11px;letter-spacing:.12em;}
+.footer .f-admin a{color:rgba(245,235,221,.22);padding:6px 8px;border:1px solid rgba(245,235,221,.12);border-radius:999px;transition:.25s;}
+.footer .f-admin a:hover{color:var(--gold);border-color:rgba(233,200,128,.45);}
 
 /* ===== Toast ===== */
 #toast-box{position:fixed;left:50%;bottom:34px;transform:translateX(-50%);z-index:300;display:flex;flex-direction:column;gap:10px;align-items:center;pointer-events:none;}
@@ -693,6 +696,42 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
   .steps .step{font-size:10px;}
   .steps .step .dot{width:22px;height:22px;font-size:11px;}
 }
+/* ===== 管理后台 ===== */
+.admin-mask{position:fixed;inset:0;z-index:400;background:rgba(4,7,20,.72);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;padding:18px;overflow-y:auto;}
+.admin-box{width:min(860px,94vw);max-height:88vh;overflow-y:auto;border-radius:var(--radius);background:linear-gradient(180deg,#101736 0%,#0B1026 100%);border:1px solid rgba(233,200,128,.28);padding:26px 26px 22px;box-shadow:0 24px 70px rgba(0,0,0,.6);}
+.admin-box h3{font-family:var(--serif);font-size:20px;letter-spacing:.1em;color:var(--gold);margin-bottom:2px;}
+.admin-box .a-sub{font-size:12px;color:var(--paper-dim);margin-bottom:16px;}
+.a-stat{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px;}
+.a-stat div{background:rgba(255,255,255,.04);border:1px solid rgba(233,200,128,.14);border-radius:12px;padding:12px 14px;}
+.a-stat b{display:block;font-family:var(--serif);font-size:22px;color:var(--gold);letter-spacing:.04em;}
+.a-stat span{font-size:11px;color:var(--paper-dim);letter-spacing:.1em;}
+.a-list{display:flex;flex-direction:column;gap:8px;max-height:46vh;overflow-y:auto;padding-right:4px;}
+.a-row{display:grid;grid-template-columns:92px 46px 1fr auto;gap:10px;align-items:center;background:rgba(255,255,255,.03);border:1px solid rgba(233,200,128,.1);border-radius:10px;padding:9px 12px;font-size:12.5px;}
+.a-row .a-no{color:var(--gold);font-family:var(--serif);}
+.a-row .a-cat{color:var(--celadon);}
+.a-row .a-body{color:var(--paper);line-height:1.6;}
+.a-row .a-body i{color:var(--paper-dim);font-style:normal;font-size:11px;}
+.a-row .a-del{border:1px solid rgba(217,99,63,.55);color:#E07B52;border-radius:8px;padding:5px 12px;font-size:12px;background:rgba(217,99,63,.08);cursor:pointer;transition:.2s;}
+.a-row .a-del:hover{background:rgba(217,99,63,.22);}
+.a-empty{padding:26px 0;text-align:center;color:var(--paper-dim);font-size:13px;}
+.a-foot{margin-top:14px;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;}
+.a-foot .a-tip{font-size:11px;color:rgba(245,235,221,.36);line-height:1.8;max-width:520px;}
+.a-btns{display:flex;gap:8px;}
+.btn-admin{border:1px solid rgba(233,200,128,.5);color:var(--gold);border-radius:999px;padding:8px 18px;font-size:13px;background:rgba(233,200,128,.06);cursor:pointer;transition:.2s;letter-spacing:.08em;}
+.btn-admin:hover{background:rgba(233,200,128,.18);}
+.btn-admin.danger{border-color:rgba(217,99,63,.55);color:#E07B52;background:rgba(217,99,63,.08);}
+.btn-admin.danger:hover{background:rgba(217,99,63,.22);}
+.admin-pass-row{display:flex;gap:10px;margin-top:14px;}
+.admin-pass-row input{flex:1;background:rgba(255,255,255,.06);border:1px solid rgba(233,200,128,.3);color:var(--paper);border-radius:10px;padding:11px 14px;font-size:14px;outline:none;}
+.admin-pass-row input:focus{border-color:var(--gold);}
+.admin-err{color:#E07B52;font-size:12px;margin-top:8px;min-height:16px;}
+@media (max-width:720px){
+  .a-stat{grid-template-columns:repeat(2,1fr);}
+  .a-row{grid-template-columns:1fr auto;grid-template-areas:"no cat" "body del";}
+  .a-row .a-no{grid-area:no;}.a-row .a-cat{grid-area:cat;text-align:right;}
+  .a-row .a-body{grid-area:body;}.a-row .a-del{grid-area:del;}
+  .admin-box{padding:20px 16px 18px;}
+}
 </style>
 </head>
 <body>
@@ -708,7 +747,6 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
     <a href="#wall" data-nav="wall" onclick="return navGo('wall')">祝愿墙</a>
     <a href="#scene" data-nav="scene" onclick="return navGo('scene')">许愿馆</a>
     <a href="#data" data-nav="data" onclick="return navGo('data')">数据</a>
-    <a href="#plan" data-nav="plan" onclick="return navGo('plan')">策划蓝图</a>
   </div>
   <button class="nav-cta" onclick="openWishModal()">写下心愿</button>
 </nav>
@@ -869,138 +907,7 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
       </div>
     </div>
   </div>
-  <p class="data-tip">注：以上为演示数据，仅示意产品结构；正式版本接入实时统计与地理分布。</p>
-</section>
-
-<!-- ===== 视图四：策划蓝图 ===== -->
-<section class="view plan-view" id="view-plan">
-  <div class="plan-body">
-    <div class="plan-sec">
-      <span class="sec-kicker">PRODUCT VISION</span>
-      <h2 class="sec-title">让一盏灯，接住一句心里话</h2>
-      <p class="sec-sub" style="max-width:760px;">产品一句话：东方祈福文化 × 轻社交 UGC 的心愿容器——发布、被看见、被回应、被记住。它不贩卖"灵验"，只经营"真诚与被看见"。</p>
-      <div class="pillar-row">
-        <div class="pillar">
-          <div class="p-no">01 · 情感寄托</div>
-          <h4>情绪价值</h4>
-          <p>为祝福、遗憾、期待找一个安放处。说不出口的话，说给一盏灯听；发布即疗愈。</p>
-        </div>
-        <div class="pillar">
-          <div class="p-no">02 · 文化仪式</div>
-          <h4>仪式感设计</h4>
-          <p>定愿 → 凝愿 → 托付 → 点亮 → 回响，五步完成"把心愿交付出去"的仪式，动作即记忆。</p>
-        </div>
-        <div class="pillar">
-          <div class="p-no">03 · 轻社交</div>
-          <h4>可持续增长</h4>
-          <p>UGC 自生长：点赞、回声、榜单让善意流动。不做一次性爆点，做长期有人回来的地方。</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="plan-sec">
-      <span class="sec-kicker">RITUAL DESIGN</span>
-      <h2 class="sec-title">许愿的仪式，五步完成</h2>
-      <div class="ritual-line">
-        <div class="t-step">壹 · 定愿</div>
-        <div class="t-mid"><div class="t-dot"></div></div>
-        <div class="t-body"><h4>选择心愿类别</h4><p>平安 / 健康 / 学业 / 事业 / 爱情 / 家庭——先想清楚"为谁、为何"，让愿望被命名。</p></div>
-      </div>
-      <div class="ritual-line">
-        <div class="t-step">贰 · 凝愿</div>
-        <div class="t-mid"><div class="t-dot"></div></div>
-        <div class="t-body"><h4>写下心愿</h4><p>140 字以内，真诚表达。系统提示"把话说具体"，具体的心愿更容易被记住。</p></div>
-      </div>
-      <div class="ritual-line">
-        <div class="t-step">叁 · 托付</div>
-        <div class="t-mid"><div class="t-dot"></div></div>
-        <div class="t-body"><h4>署名或匿名</h4><p>可留昵称，也可做"匿名的一盏灯"。把心事交给一盏灯，就是交付。</p></div>
-      </div>
-      <div class="ritual-line">
-        <div class="t-step">肆 · 点亮</div>
-        <div class="t-mid"><div class="t-dot"></div></div>
-        <div class="t-body"><h4>灯笼升挂树冠</h4><p>生成唯一编号（祈·月日·序号），灯笼飞入树冠、微微摇曳——"你的心愿已上树"。</p></div>
-      </div>
-      <div class="ritual-line">
-        <div class="t-step">伍 · 回响</div>
-        <div class="t-mid"><div class="t-dot"></div></div>
-        <div class="t-body"><h4>被看见与被回应</h4><p>获赞、被祝福、年度回顾——心愿不是发出去就消失，它会被回应，也提醒你继续向前。</p></div>
-      </div>
-    </div>
-
-    <div class="plan-sec">
-      <span class="sec-kicker">GROWTH FLYWHEEL</span>
-      <h2 class="sec-title">善意的循环：流量如何转起来</h2>
-      <div class="flywheel-wrap">
-        <svg class="flywheel-svg" viewBox="0 0 420 420" role="img" aria-label="流量飞轮">
-          <defs>
-            <marker id="fwArrow" markerWidth="10" markerHeight="10" refX="7" refY="3.5" orient="auto" markerUnits="userSpaceOnUse">
-              <path d="M0,0 L8,3.5 L0,7 Z" fill="#E9C880"/>
-            </marker>
-          </defs>
-          <circle cx="210" cy="210" r="150" fill="none" stroke="rgba(233,200,128,.14)" stroke-width="14"/>
-          <circle cx="210" cy="210" r="150" fill="none" stroke="rgba(233,200,128,.12)" stroke-dasharray="3 7" stroke-width="2"/>
-          <path d="M210,60 A150,150 0 0 1 340,136" fill="none" stroke="#E9C880" stroke-width="5" stroke-linecap="round" marker-end="url(#fwArrow)"/>
-          <path d="M360,280 A150,150 0 0 1 255,353" fill="none" stroke="#D97B45" stroke-width="5" stroke-linecap="round" marker-end="url(#fwArrow)"/>
-          <path d="M165,360 A150,150 0 0 1 68,278" fill="none" stroke="#7FA8A0" stroke-width="5" stroke-linecap="round" marker-end="url(#fwArrow)"/>
-          <path d="M52,140 A150,150 0 0 1 160,62" fill="none" stroke="#D77A8C" stroke-width="5" stroke-linecap="round" marker-end="url(#fwArrow)"/>
-          <circle cx="210" cy="60" r="26" fill="#1B2448" stroke="#E9C880" stroke-width="2"/><text x="210" y="66" text-anchor="middle" fill="#E9C880" font-size="14" font-family="Noto Serif SC, serif">发布</text>
-          <circle cx="368" cy="210" r="26" fill="#1B2448" stroke="#D77A8C" stroke-width="2"/><text x="368" y="216" text-anchor="middle" fill="#D77A8C" font-size="14" font-family="Noto Serif SC, serif">共鸣</text>
-          <circle cx="210" cy="360" r="26" fill="#1B2448" stroke="#D97B45" stroke-width="2"/><text x="210" y="366" text-anchor="middle" fill="#D97B45" font-size="14" font-family="Noto Serif SC, serif">分享</text>
-          <circle cx="52" cy="210" r="26" fill="#1B2448" stroke="#7FA8A0" stroke-width="2"/><text x="52" y="216" text-anchor="middle" fill="#7FA8A0" font-size="14" font-family="Noto Serif SC, serif">回流</text>
-          <text x="210" y="190" text-anchor="middle" fill="#F4E3BC" font-size="15" font-family="Noto Serif SC, serif" font-weight="700">善意的循环</text>
-          <text x="210" y="216" text-anchor="middle" fill="rgba(245,235,221,.6)" font-size="11" font-family="Noto Sans SC, sans-serif">一愿点亮一愿</text>
-          <circle cx="210" cy="210" r="60" fill="rgba(233,200,128,.05)"/>
-        </svg>
-        <div class="flywheel-list">
-          <div class="fw-item"><div class="fw-no">①</div><div><h5>发布心愿</h5><p>低门槛 + 强仪式：30 秒写下，1 分钟点亮，先让"说出来"变得容易。</p></div></div>
-          <div class="fw-item"><div class="fw-no">②</div><div><h5>情感共鸣</h5><p>真诚的内容自带传播力——"愿考研上岸""愿妈妈健康"是全民共同情绪。</p></div></div>
-          <div class="fw-item"><div class="fw-no">③</div><div><h5>分享传播</h5><p>一键生成带编号的祝福卡片，晒出"我把第 N 盏灯挂在祈愿树上"，形成社交货币。</p></div></div>
-          <div class="fw-item"><div class="fw-no">④</div><div><h5>新客回流</h5><p>被分享吸引而来的人，写下自己的心愿，循环再启。每一轮都沉淀内容资产。</p></div></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="plan-sec">
-      <span class="sec-kicker">OPERATION CALENDAR</span>
-      <h2 class="sec-title">全年情绪节点，让流量有节奏</h2>
-      <div class="cal-grid" id="calGrid"></div>
-    </div>
-
-    <div class="plan-sec">
-      <span class="sec-kicker">GROWTH MECHANISMS</span>
-      <h2 class="sec-title">六个增长机制</h2>
-      <div class="mech-table-wrap">
-        <table class="mech">
-          <colgroup><col class="c1"><col class="c2"><col class="c3"></colgroup>
-          <thead><tr><th>机制</th><th>作用</th><th>落地方式</th></tr></thead>
-          <tbody>
-            <tr><td><b>情绪节点日历</b></td><td>稳定获客</td><td class="dim">按春节 / 中秋 / 高考 / 考研 / 毕业季等切换主题皮肤与话题 tag，节点自带搜索流量</td></tr>
-            <tr><td><b>每日一愿</b></td><td>日活钩子</td><td class="dim">每日主题词（如"勇气""和解"）+ "今日已点亮 N 盏"，制造稀缺与在场感</td></tr>
-            <tr><td><b>祝福卡片分享</b></td><td>裂变传播</td><td class="dim">一键生成带编号与金句的卡片图，社交平台晒图即拉新</td></tr>
-            <tr><td><b>心愿回声</b></td><td>召回留存</td><td class="dim">心愿获赞 / 被回复时通知"你的心愿被回响了"，7 天未回访可召回</td></tr>
-            <tr><td><b>主题许愿页</b></td><td>SEO 承接</td><td class="dim">"高考祈福""考研上岸""为家人求平安"等关键词页承接搜索长尾</td></tr>
-            <tr><td><b>年度愿望书</b></td><td>长线回访</td><td class="dim">年末生成个人愿望回顾 H5，跨年节点集中引爆传播</td></tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-
-    <div class="plan-sec">
-      <span class="sec-kicker">TRUST &amp; SAFETY</span>
-      <h2 class="sec-title">走得更远的底线</h2>
-      <div class="guard-row">
-        <div class="guard"><h5>先审后发</h5><p>敏感词过滤 + 人工抽审 + 举报通道。真诚的内容环境，是产品长期成立的前提。</p></div>
-        <div class="guard"><h5>社区公约</h5><p>不攻击他人、不承诺灵验、不做迷信营销。祈福是文化表达，不是交易筹码。</p></div>
-        <div class="guard"><h5>理性祈福</h5><p>页面引导"许愿是自我激励与情感表达，幸福更在现实行动里"——对用户负责，也规避风险。</p></div>
-      </div>
-    </div>
-
-    <div class="plan-quote">
-      <p class="q">愿每一次许愿，都是一次温柔的自勉。<br>祈愿树不承诺灵验，只承诺被看见。</p>
-      <p class="qa">—— 产品初心 · 策划蓝图</p>
-    </div>
-  </div>
+  <p class="data-tip">数据来自网友公开心愿的实时统计，随每一盏灯更新。</p>
 </section>
 
 <!-- ===== 视图五：场景落地页 ===== -->
@@ -1015,7 +922,7 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
   </div>
   <div id="sceneList" class="scene-grid"></div>
   <div id="sceneDetail" class="scene-detail" style="display:none"></div>
-  <div class="scene-tip">这里是「心愿主题馆」——高考上岸、家人平安、宝宝健康……每个心愿都有自己的主题角落。正式上线后，每个主题都会有自己的独立地址，你从搜索引擎点进来就能直接许愿。</div>
+  <div class="scene-tip">这里是「心愿主题馆」——高考上岸、家人平安、宝宝健康……每个心愿都有自己的主题角落。从搜索引擎直接进入对应主题，即可一键许愿。</div>
 </section>
 
 <!-- ===== 移动端底部导航 ===== -->
@@ -1024,7 +931,6 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
   <a href="#wall" data-nav="wall" onclick="return navGo('wall')">祝愿墙</a>
   <a href="#scene" data-nav="scene" onclick="return navGo('scene')">许愿馆</a>
   <a href="#data" data-nav="data" onclick="return navGo('data')">数据</a>
-  <a href="#plan" data-nav="plan" onclick="return navGo('plan')">策划蓝图</a>
 </nav>
 
 <!-- ===== 页脚 ===== -->
@@ -1036,11 +942,41 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
     <a href="#wall" data-nav="wall" onclick="return navGo('wall')">祝愿墙</a>
     <a href="#scene" data-nav="scene" onclick="return navGo('scene')">许愿馆</a>
     <a href="#data" data-nav="data" onclick="return navGo('data')">数据</a>
-    <a href="#plan" data-nav="plan" onclick="return navGo('plan')">策划蓝图</a>
   </div>
-  <p class="f-note">许愿是情感表达与自我激励的方式。祈愿树愿每一个愿望都被温柔以待，也提醒你：幸福更在现实的行动里。本页面为产品策划与交互原型，祝愿内容含演示样例，正式运营将遵循先审后发与社区公约。</p>
-  <div class="f-copy">© 2026 祈愿树 · 策划原型 · 用一盏灯的温度，接住一句心里话</div>
+  <p class="f-note">许愿是情感表达与自我激励的方式。所有心愿在公开展示前均经内容审核，并遵循社区公约：不攻击他人、不承诺灵验、不做迷信营销。理性祈福——幸福更在现实的行动里。如发现违规内容，可通过页面举报入口反馈。</p>
+  <div class="f-copy">© 2026 祈愿树 · 万家灯火，一愿一灯</div>
+  <div class="f-admin"><a href="javascript:void(0)" onclick="openAdminGate()">管理后台</a></div>
 </footer>
+
+<!-- ===== 管理后台 ===== -->
+<div class="admin-mask" id="adminGate" style="display:none">
+  <div class="admin-box" style="max-width:400px;text-align:center">
+    <h3>管 理 后 台</h3>
+    <p class="a-sub">请输入管理密码进入</p>
+    <div class="admin-pass-row"><input type="password" id="adminPass" placeholder="管理密码" onkeydown="if(event.key==='Enter')adminLogin()"></div>
+    <div class="admin-err" id="adminErr"></div>
+    <div style="display:flex;gap:10px;justify-content:center;margin-top:10px">
+      <button class="btn-admin" onclick="adminLogin()">进入</button>
+      <button class="btn-admin danger" onclick="closeAdmin()">取消</button>
+    </div>
+  </div>
+</div>
+<div class="admin-mask" id="adminPanel" style="display:none">
+  <div class="admin-box">
+    <h3>祈愿树 · 管理后台</h3>
+    <p class="a-sub" id="adminSub">正在加载云端数据…</p>
+    <div class="a-stat" id="adminStat"></div>
+    <div class="a-list" id="adminList"></div>
+    <div class="a-empty" id="adminEmpty" style="display:none">云端暂无心愿。发布第一条心愿后，会出现在这里。</div>
+    <div class="a-foot">
+      <div class="a-tip">操作说明：本面板用于内容管理。发现违规心愿可一键「下线」，心愿会从前台与统计中消失（数据保留，可在 Supabase 控制台恢复）。修改密码请编辑源码中的 ADMIN_PASS 变量。规模化运营前建议将管理操作迁移至服务端接口。</div>
+      <div class="a-btns">
+        <button class="btn-admin" onclick="loadAdminPanel()">刷新</button>
+        <button class="btn-admin danger" onclick="closeAdmin()">退出</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 <!-- ===== 心愿弹窗 ===== -->
 <div class="modal-mask" id="wishMask" onclick="if(event.target===this)closeWishModal()">
@@ -1185,12 +1121,21 @@ function cloudTime(iso){
   if(s<1)return'刚刚'; if(s<60)return Math.floor(s)+' 分钟前';
   if(s<1440)return Math.floor(s/60)+' 小时前'; return Math.floor(s/1440)+' 天前';
 }
-var cloudToday=0;
+var cloudToday=0, hiddenIds=null;
 function syncCloud(){
   if(!CLOUD)return;
-  supa('/rest/v1/wishes?select=*&order=created_at.desc&limit=80').then(function(rows){
+  supa('/rest/v1/hidden_wishes?select=wish_id&limit=1000').then(function(hs){
+    if(Array.isArray(hs)){
+      var s={}; hs.forEach(function(h){s[h.wish_id]=1;});
+      hiddenIds=s;
+    }
+    return supa('/rest/v1/wishes?select=*&order=created_at.desc&limit=80');
+  }).then(function(rows){
     if(!Array.isArray(rows))return;
     if(rows.length===0)return;
+    if(hiddenIds){
+      rows=rows.filter(function(r){return !hiddenIds[r.id];});
+    }
     var mine=rows.map(function(r){return{id:'c'+r.id,no:r.no,cat:r.cat,name:r.name||'匿名的一盏灯',time:cloudTime(r.created_at),likes:r.likes||0,text:r.text};});
     var localNew=userWishes.filter(function(w){return w.id&&w.id.indexOf('u')===0;});
     userWishes=mine.concat(localNew);
@@ -1949,7 +1894,7 @@ function renderCal(){
 }
 
 /* ============ 路由（JS 直接驱动视图切换 + hash 同步） ============ */
-var VIEWS={tree:'view-tree',wall:'view-wall',scene:'view-scene',data:'view-data',plan:'view-plan'};
+var VIEWS={tree:'view-tree',wall:'view-wall',scene:'view-scene',data:'view-data'};
 function goView(name){
   if(!VIEWS[name]) name='tree';
   Object.keys(VIEWS).forEach(function(k){
@@ -2142,6 +2087,79 @@ document.addEventListener('DOMContentLoaded',function(){
   tryInitCharts();
   syncCloud(); /* 正式版：云端数据到达后自动刷新页面 */
 });
+
+/* ============ 管理后台 ============ */
+var ADMIN_PASS='qiyuan2026'; /* 管理密码：可自行修改 */
+function adminFetch(path,opt){
+  var o=opt||{};
+  var h={apikey:CONFIG.SUPA_KEY,'Authorization':'Bearer '+CONFIG.SUPA_KEY,'Content-Type':'application/json'};
+  if(o.headers)Object.assign(h,o.headers);
+  return fetch(CONFIG.SUPA_URL+path,Object.assign({method:o.method||'GET',headers:h},o)).then(function(r){return r.json();}).catch(function(){return null;});
+}
+function openAdminGate(){
+  document.getElementById('adminGate').style.display='flex';
+  document.getElementById('adminErr').textContent='';
+  document.getElementById('adminPass').value='';
+  setTimeout(function(){document.getElementById('adminPass').focus();},80);
+}
+function closeAdmin(){
+  document.getElementById('adminGate').style.display='none';
+  document.getElementById('adminPanel').style.display='none';
+}
+function adminLogin(){
+  var v=document.getElementById('adminPass').value;
+  if(v===ADMIN_PASS){
+    document.getElementById('adminGate').style.display='none';
+    loadAdminPanel();
+  }else{
+    document.getElementById('adminErr').textContent='密码不对，请重试';
+  }
+}
+function catName(id){return catMap[id]?catMap[id].name:id;}
+function loadAdminPanel(){
+  var p=document.getElementById('adminPanel');
+  if(!p)return;
+  p.style.display='flex';
+  document.getElementById('adminSub').textContent='正在加载云端数据…';
+  document.getElementById('adminList').innerHTML='';
+  document.getElementById('adminEmpty').style.display='none';
+  adminFetch('/rest/v1/wishes?select=*&order=created_at.desc&limit=60').then(function(rows){
+    if(!Array.isArray(rows)){
+      document.getElementById('adminSub').textContent='云端连接失败，请检查网络后重试';
+      return;
+    }
+    adminFetch('/rest/v1/hidden_wishes?select=wish_id&limit=1000').then(function(hs){
+      var hid={}; if(Array.isArray(hs)){hs.forEach(function(h){hid[h.wish_id]=1;});}
+      var stat=document.getElementById('adminStat');
+      var by={}; rows.forEach(function(r){by[r.cat]=(by[r.cat]||0)+1;});
+      var today=0;
+      rows.forEach(function(r){if((r.created_at||'').indexOf(nowStr())>-1){today++;}});
+      stat.innerHTML='<div><b>'+rows.length+'</b><span>云端心愿（近 60 条）</span></div><div><b>'+today+'</b><span>今日新增</span></div><div><b>'+Object.keys(hid).length+'</b><span>已下线</span></div><div><b>'+(CONFIG.SUPA_URL? '已连接':'未连接')+'</b><span>云端状态</span></div>';
+      var list=document.getElementById('adminList');
+      list.innerHTML='';
+      rows.forEach(function(r){
+        var hidden=!!hid[r.id];
+        var d=document.createElement('div'); d.className='a-row';
+        d.innerHTML='<span class="a-no">'+esc(r.no||('#'+r.id))+(hidden?' <i style="color:#E07B52">[已下线]</i>':'')+'</span><span class="a-cat">'+catName(r.cat)+'</span><span class="a-body">'+esc(r.text)+' <i>— '+(esc(r.name||'匿名的一盏灯'))+' · '+cloudTime(r.created_at)+' · '+((r.likes||0))+' 盏灯</i></span><button class="a-del">'+(hidden?'恢复':'下线')+'</button>';
+        d.querySelector('.a-del').onclick=function(){
+          if(hidden){
+            if(!confirm('确认恢复这条心愿？将重新公开展示：\n'+ (r.text||'').slice(0,60)))return;
+            adminFetch('/rest/v1/hidden_wishes?wish_id=eq.'+r.id,{method:'DELETE'}).then(function(){loadAdminPanel();try{syncCloud();}catch(e){}});
+          }else{
+            if(!confirm('确认将这条心愿下线？下线后不再公开展示（数据保留，可随时恢复）：\n'+ (r.text||'').slice(0,60)))return;
+            adminFetch('/rest/v1/hidden_wishes',{method:'POST',headers:{Prefer:'return=minimal'},body:JSON.stringify({wish_id:r.id})}).then(function(){loadAdminPanel();try{syncCloud();}catch(e){}});
+          }
+        };
+        list.appendChild(d);
+      });
+      if(rows.length===0)document.getElementById('adminEmpty').style.display='block';
+      document.getElementById('adminSub').textContent='共 '+rows.length+' 条云端心愿 · 下线后自动从前台消失，可随时恢复';
+    });
+  });
+}
+function esc(s){
+  return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
 </script>
 </body>
 </html>
