@@ -1172,7 +1172,7 @@ var userWishes=loadUser(), likes=loadLikes();
    在 supabase.com 注册一个免费项目 → New project → 建表 wishes(id, no, cat, name, text, likes, created_at)
    → 把项目 URL 和 anon key 填进下面 CONFIG。填好后心愿自动存云端、所有网友共享；
    留空则用本地存储（单机演示模式），两种模式页面功能一致。 */
-var CONFIG={ SUPA_URL:'', SUPA_KEY:'' };
+var CONFIG={ SUPA_URL:'https://jkgicgkozekccqaxtpnc.supabase.co', SUPA_KEY:'sb_publishable_4xSWYGF8H2N3TPvPjF2MGg_eyFbAsiz' };
 var CLOUD=!!(CONFIG.SUPA_URL&&CONFIG.SUPA_KEY);
 function supa(path,opt){
   return fetch(CONFIG.SUPA_URL+path,Object.assign({
