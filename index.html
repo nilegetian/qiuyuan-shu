@@ -1175,9 +1175,10 @@ var userWishes=loadUser(), likes=loadLikes();
 var CONFIG={ SUPA_URL:'https://jkgicgkozekccqaxtpnc.supabase.co', SUPA_KEY:'sb_publishable_4xSWYGF8H2N3TPvPjF2MGg_eyFbAsiz' };
 var CLOUD=!!(CONFIG.SUPA_URL&&CONFIG.SUPA_KEY);
 function supa(path,opt){
-  return fetch(CONFIG.SUPA_URL+path,Object.assign({
-    headers:{apikey:CONFIG.SUPA_KEY,'Authorization':'Bearer '+CONFIG.SUPA_KEY,'Content-Type':'application/json'}
-  },opt||{})).then(function(r){return r.json();}).catch(function(){return null;});
+  var o=opt||{};
+  var h={apikey:CONFIG.SUPA_KEY,'Authorization':'Bearer '+CONFIG.SUPA_KEY,'Content-Type':'application/json'};
+  if(o.headers)Object.assign(h,o.headers);
+  return fetch(CONFIG.SUPA_URL+path,Object.assign({headers:h},o)).then(function(r){return r.json();}).catch(function(){return null;});
 }
 function cloudTime(iso){
   var s=(Date.now()-new Date(iso).getTime())/6e4;
@@ -1189,18 +1190,19 @@ function syncCloud(){
   if(!CLOUD)return;
   supa('/rest/v1/wishes?select=*&order=created_at.desc&limit=80').then(function(rows){
     if(!Array.isArray(rows))return;
+    if(rows.length===0)return;
     var mine=rows.map(function(r){return{id:'c'+r.id,no:r.no,cat:r.cat,name:r.name||'匿名的一盏灯',time:cloudTime(r.created_at),likes:r.likes||0,text:r.text};});
     var localNew=userWishes.filter(function(w){return w.id&&w.id.indexOf('u')===0;});
     userWishes=mine.concat(localNew);
     try{renderTree(false);renderWall();updateStats();}catch(e){}
   });
   supa('/rest/v1/wishes?select=id&created_at=gte.'+encodeURIComponent(nowStr()+'T00:00:00+08:00')).then(function(rows){
-    if(Array.isArray(rows)){cloudToday=rows.length; try{renderTodayFocus();}catch(e){}}
+    if(Array.isArray(rows)&&rows.length){cloudToday=rows.length; try{renderTodayFocus();}catch(e){}}
   });
 }
 function cloudPush(w){
   if(!CLOUD)return;
-  supa('/rest/v1/wishes',{method:'POST',body:JSON.stringify({no:w.no,cat:w.cat,name:w.name,text:w.text,likes:w.likes||0})}).then(function(r){
+  supa('/rest/v1/wishes',{method:'POST',headers:{Prefer:'return=representation'},body:JSON.stringify({no:w.no,cat:w.cat,name:w.name,text:w.text,likes:w.likes||0})}).then(function(r){
     var row=(r&&r.id)?r:((r&&r[0]&&r[0].id)?r[0]:null);
     if(row){w._sid=row.id;}
   });
