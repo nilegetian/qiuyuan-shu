@@ -345,6 +345,23 @@ img{max-width:100%;display:block;}
 .personal-banner .pb-t{font-family:var(--serif);font-size:15px;color:var(--gold-soft);}
 .personal-banner .pb-s{font-size:12px;color:var(--paper-dim);margin-top:4px;}
 .personal-banner .pb-btn{padding:8px 22px;border-radius:999px;font-size:13px;font-weight:600;background:var(--gold);color:#2B1A08;letter-spacing:.1em;cursor:pointer;}
+/* ===== 背景音乐 ===== */
+.bgm-btn{
+  position:fixed;right:18px;bottom:96px;z-index:999;width:46px;height:46px;border-radius:50%;
+  border:1px solid rgba(233,200,128,.45);background:rgba(18,14,10,.88);color:var(--gold);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.25s;
+  box-shadow:0 4px 18px rgba(0,0,0,.4);
+}
+.bgm-btn:hover{border-color:var(--gold);transform:translateY(-2px);}
+.bgm-btn.on{background:rgba(233,200,128,.2);box-shadow:0 0 0 4px rgba(233,200,128,.12);}
+.bgm-btn svg{width:22px;height:22px;}
+.bgm-btn.on svg .wave{animation:bgmWave 1.6s ease-in-out infinite;transform-origin:center;}
+.bgm-btn.on svg .wave2{animation-delay:.3s;}
+.bgm-btn.on svg .wave3{animation-delay:.6s;}
+@keyframes bgmWave{0%,100%{transform:scaleY(.55);opacity:.6;}50%{transform:scaleY(1);opacity:1;}}
+.bgm-btn.off svg .mute-x{opacity:.95;}
+.bgm-btn.off svg .wave{opacity:.22;}
+@media(max-width:760px){.bgm-btn{right:14px;bottom:88px;width:42px;height:42px;}}
 .wall-note{max-width:1120px;margin:16px auto 0;padding:0 24px;font-size:12px;color:rgba(245,235,221,.4);letter-spacing:.08em;}
 .wish-cta{
   max-width:1120px;margin:22px auto 0;padding:18px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;
@@ -956,6 +973,19 @@ table.mech td b{color:var(--gold-soft);font-weight:600;}
   <div class="f-admin"><a href="javascript:void(0)" onclick="openAdminGate()">管理后台</a></div>
 </footer>
 
+<!-- ===== 背景音乐 ===== -->
+<audio id="bgmAudio" loop preload="auto" src="qiyuan-bgm.mp3"></audio>
+<button id="bgmBtn" class="bgm-btn off" onclick="toggleBgm()" title="开启音乐" aria-label="背景音乐开关">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+    <path class="wave wave1" d="M4 10v4" />
+    <path class="wave wave2" d="M8 7v10" />
+    <path class="wave wave3" d="M12 4v16" />
+    <path class="wave" d="M16 7v10" />
+    <path class="wave wave1" d="M20 10v4" />
+    <line class="mute-x" x1="4" y1="4" x2="20" y2="20" />
+  </svg>
+</button>
+
 <!-- ===== 管理后台 ===== -->
 <div class="admin-mask" id="adminGate" style="display:none">
   <div class="admin-box" style="max-width:400px;text-align:center">
@@ -1188,6 +1218,39 @@ function shareMyTree(){
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done).catch(function(){fallbackCopy(txt);done();}); }
     else{ fallbackCopy(txt); done(); }
   }
+}
+var BGM_KEY='wishTree_bgm';
+var bgmAudio=null, bgmOn=false, bgmTried=false;
+function initBgm(){
+  bgmAudio=document.getElementById('bgmAudio');
+  var btn=document.getElementById('bgmBtn');
+  if(!bgmAudio||!btn) return;
+  try{bgmOn=localStorage.getItem(BGM_KEY)==='1';}catch(e){}
+  updateBgmBtn();
+  /* 打开首页尽量自动播放（浏览器限制时等首次点击） */
+  bgmTried=true;
+  if(bgmOn){
+    bgmAudio.volume=0.55;
+    bgmAudio.play().then(function(){updateBgmBtn();}).catch(function(){});
+  }
+  var kick=function(){ if(!bgmOn){ toggleBgm(); } };
+  document.addEventListener('click',kick,{once:true,capture:true});
+  document.addEventListener('touchstart',kick,{once:true,capture:true});
+}
+function toggleBgm(){
+  if(!bgmAudio) return;
+  bgmOn=!bgmOn;
+  try{localStorage.setItem(BGM_KEY,bgmOn?'1':'0');}catch(e){}
+  if(bgmOn){ bgmAudio.volume=0.55; bgmAudio.play().catch(function(){}); }
+  else{ bgmAudio.pause(); }
+  updateBgmBtn();
+}
+function updateBgmBtn(){
+  var b=document.getElementById('bgmBtn');
+  if(!b) return;
+  b.classList.toggle('on',bgmOn);
+  b.classList.toggle('off',!bgmOn);
+  b.title=bgmOn?'关闭音乐':'开启音乐';
 }
 function supa(path,opt){
   var o=opt||{};
@@ -2200,6 +2263,7 @@ document.addEventListener('DOMContentLoaded',function(){
   tryInitCharts();
   syncCloud(); /* 正式版：云端数据到达后自动刷新页面 */
   loadPersonal(); /* 打开分享链接 ?u= 时加载对应祈愿树 */
+  initBgm(); /* 背景音乐：自动播放 + 悬浮开关 */
 });
 
 /* ============ 管理后台 ============ */
