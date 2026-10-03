@@ -1615,7 +1615,7 @@ function litLantern(el,on){
 }
 
 /* ============ 分享：心愿卡 / 系统分享 / 复制文案 ============ */
-var shareUrl=(function(){var h=location.href;return (h.indexOf('file:')===0)?'':h;})();
+var shareUrl=(function(){var h=location.href; if(h.indexOf('file:')===0) return 'https://nilegetian.github.io/qiuyuan-shu/'; return h;})();
 var shareQrUrl=null;
 function openShare(){
   if(!curDetail) return;
